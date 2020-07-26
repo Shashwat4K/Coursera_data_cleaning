@@ -1,5 +1,14 @@
 library(dplyr)
 
+download_and_extract <- function(URL, filename) {
+    if(!file.exists(filename)) {
+        download.file(URL, filename, method="curl")
+    }
+    if(!file.exists(DATA_DIR)) {
+        unzip(filename)
+    }
+}
+
 read_data <- function(path) {
     read.table(path)
 }
@@ -39,6 +48,13 @@ merge_X_and_y <- function(Xfile, yfile, subject_file, activity_label_file, featu
 merge_train_and_test <- function(train_data_block, test_data_block) {
     rbind(train_data_block, test_data_block)  
 }
+
+# Download and extract the data
+
+save_as <- "Week4_project_data.zip"
+URL <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+
+download_and_extract(URL, save_as)
 
 # Set all the file paths relative to Data directory: UCI HAR Dataset
 DATA_DIR <- paste0(getwd(), "/UCI HAR Dataset")
