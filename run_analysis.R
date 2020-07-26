@@ -9,10 +9,13 @@ download_and_extract <- function(URL, filename) {
     }
 }
 
+#================= Auxilliary functions ========================
+
 read_data <- function(path) {
     read.table(path)
 }
 
+# To read the names of features from 'features.txt'
 read_feature_names <- function(feature_file_path) {
     read.table(feature_file_path,
                header=FALSE,
@@ -20,6 +23,7 @@ read_feature_names <- function(feature_file_path) {
                col.names = c("feature_number", "feature_name"))
 }
 
+# To read subject list from a subject file
 read_train_subjects <- function(subject_file_path) {
     read.table(subject_file_path,
                header=FALSE,
@@ -27,6 +31,7 @@ read_train_subjects <- function(subject_file_path) {
                col.names = c("subject"))
 }
 
+# To read activity labels from 'activity_labels.txt'
 read_activity_types <- function(activity_label_file) {
     read.table(activity_label_file,
                header=FALSE,
@@ -34,6 +39,7 @@ read_activity_types <- function(activity_label_file) {
                col.names = c("activity_label", "activity_name"))
 }
 
+# Binds the 561 features with activity labels and subjects. i.e. Merge 'X' and 'y' part
 merge_X_and_y <- function(Xfile, yfile, subject_file, activity_label_file, feature_file_path) {
     subjects <- read_train_subjects(subject_file)
     X <- read.table(Xfile, header=FALSE, sep="")
@@ -45,9 +51,12 @@ merge_X_and_y <- function(Xfile, yfile, subject_file, activity_label_file, featu
     cbind(subjects, y, X)
 }
 
+# Merge the training and testing data blocks into one block
 merge_train_and_test <- function(train_data_block, test_data_block) {
     rbind(train_data_block, test_data_block)  
 }
+                
+#===================== Analysis =============================
 
 # Download and extract the data
 
@@ -103,6 +112,7 @@ names(final_output) <- gsub("-mean()", "Mean", names(final_output))
 names(final_output) <- gsub("-std()", "Std", names(final_output))
 # print(names(final_output))
 # head(final_output, n=15)
+# str(final_output)
 
 # Writing the tidy dataset
 write.table(final_output, "Final_Tidy_Data.txt", row.name=FALSE)
